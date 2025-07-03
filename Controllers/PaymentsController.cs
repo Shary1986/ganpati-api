@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GanpatiPaymentsAPI.Models;
+using GanpatiPaymentsAPI.Data;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace GanpatiPaymentsAPI.Controllers
 {
@@ -7,22 +10,30 @@ namespace GanpatiPaymentsAPI.Controllers
     [ApiController]
     public class PaymentsController : ControllerBase
     {
-        private static List<Payment> _payments = new(); // In-memory storage
+        private readonly PaymentsDbContext _context;
+
+        public PaymentsController(PaymentsDbContext context)
+        {
+            _context = context;
+        }
 
         [HttpPost]
-        public IActionResult SavePayments([FromBody] List<Payment> payments)
+        public async Task<IActionResult> SavePayments([FromBody] List<Payment> payments)
         {
-            foreach (var payment in payments)
+            foreach (var p in payments)
             {
-                _payments.Add(payment);
+                await _context.Payments.AddAsync(p);
             }
-            return Ok(new { message = "Payments saved successfully", count = payments.Count });
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Saved to DB", count = payments.Count });
         }
 
         [HttpGet]
-        public IActionResult GetPayments()
+        public async Task<IActionResult> GetPayments()
         {
-            return Ok(_payments);
+            var data = await _context.Payments.ToListAsync();
+            return Ok(data);
         }
     }
 }
