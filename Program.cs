@@ -1,3 +1,20 @@
+var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080); // Important for Docker on Render
+});
+
+builder.Services.AddControllers();
+
+var app = builder.Build();
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
+app.Run();
+
+/*
 using GanpatiPaymentsAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +31,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+**/
 
 //below code is for before postgre
 
