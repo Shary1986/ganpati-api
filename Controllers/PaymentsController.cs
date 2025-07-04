@@ -18,8 +18,25 @@ namespace GanpatiPaymentsAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SavePayments([FromBody] List<Payment> payments)
+        //public async Task<IActionResult> SavePayments([FromBody] List<Payment> payments)
+        public async Task<IActionResult> SavePayments([FromBody] Payment payments)
         {
+            if (payments == null)
+                return BadRequest("Payment is null");
+
+            try
+            {
+                _context.Payments.Add(payments);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Payment save failed: " + ex.Message);
+                return StatusCode(500, $"Server error: {ex.Message}");
+            }
+
+            /*
             foreach (var p in payments)
             {
                 await _context.Payments.AddAsync(p);
@@ -27,6 +44,7 @@ namespace GanpatiPaymentsAPI.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Saved to DB", count = payments.Count });
+            **/
         }
 
         [HttpGet]
