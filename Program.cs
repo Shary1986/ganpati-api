@@ -3,6 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Allow all origins (or define specific ones like "capacitor://localhost")
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenAnyIP(8080); // Important for Docker on Render
@@ -15,6 +26,8 @@ builder.Services.AddDbContext<PaymentsDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSqlConnection")));
 
 var app = builder.Build();
+
+app.UseCors("AllowAll"); //  Add this BEFORE UseAuthorization
 
 try
 {
