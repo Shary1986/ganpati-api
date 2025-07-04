@@ -1,10 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace GanpatiPaymentsAPI.Models
 {
     public class Payment
     {
-        public string Id { get; set; }
+        [Key]
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
