@@ -27,7 +27,8 @@ namespace GanpatiPaymentsAPI.Controllers
             try
             {
                 payments.Id = Guid.NewGuid().ToString();      // Required
-                payments.Status = "New";
+                payments.Status = "Paid";
+
                 _context.Payments.Add(payments);
                 await _context.SaveChangesAsync();
                 return Ok();
