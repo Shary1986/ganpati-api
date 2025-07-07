@@ -6,7 +6,7 @@ namespace GanpatiPaymentsAPI.Models
     public class Payment
     {
         [Key]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string Id { get; set; } 
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
@@ -33,6 +33,7 @@ namespace GanpatiPaymentsAPI.Models
 
         [JsonPropertyName("emailId")]
         public string EmailId { get; set; }
+        public string Status { get; set; }
 
         [JsonPropertyName("savedAt")]
         public DateTime SavedAt { get; set; }
