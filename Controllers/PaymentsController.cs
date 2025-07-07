@@ -56,7 +56,7 @@ namespace GanpatiPaymentsAPI.Controllers
             var data = await _context.Payments.ToListAsync();
             return Ok(data);
         }
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<IActionResult> GetAllPayments()
         {
             var payments = await _context.Payments.ToListAsync();
